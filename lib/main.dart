@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:onyourmarks_student/Chat/ChatPage.dart';
 import 'package:onyourmarks_student/HomeScreen.dart';
+import 'package:onyourmarks_student/Pages/App/LoginPage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +35,8 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen()
+      debugShowCheckedModeBanner: false,
+      home: LoginPage()
     );
   }
 }
