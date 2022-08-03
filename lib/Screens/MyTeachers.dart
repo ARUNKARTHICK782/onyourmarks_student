@@ -1,7 +1,10 @@
+import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:onyourmarks_student/API%20Handler/profileAPIs.dart';
+import 'package:onyourmarks_student/Components/getAppBar.dart';
 import 'package:onyourmarks_student/models/TeacherModel.dart';
-
-import '../API Handler/StudentsAPIs.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyTeachers extends StatefulWidget {
   const MyTeachers({Key? key}) : super(key: key);
@@ -12,84 +15,93 @@ class MyTeachers extends StatefulWidget {
 
 class _MyTeachersState extends State<MyTeachers> {
 
+  List<TeacherModel> teachers = [];
+  var isFetching = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:FutureBuilder<List<TeacherModel>>(
-        future: getMyTeachers(),
-        builder: (BuildContext context,AsyncSnapshot<List<TeacherModel>> snapshot){
-          List<Widget> children = [];
-          if(snapshot.hasError){
-            children=[
-              Center(
-                child: Text("Error"),
-              )
-            ];
-          }
-          else if(snapshot.hasData){
-            children = [
-              Expanded(
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: snapshot.data?.length,
-                    itemBuilder: (BuildContext context,int index){
-                  return ExpansionTile(
-                    title: Text(snapshot.data?.elementAt(index).name ?? ''),
-                    children:[ Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Expanded(flex:2,child: Text("Name")),
-                                Expanded(flex:4,child: Text(snapshot.data?.elementAt(index).name ?? " ")),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left:8.0,right: 8.0,bottom: 8.0),
-                            child: Row(
-                              children: [
-                                Expanded(flex:2,child: Text("Subject")),
-                                Expanded(flex:4,child: Text(snapshot.data?.elementAt(index).subject_name ?? " ")),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),]
-                  );
-                }),
-              )
-            ];
-          }
-          else{
-            children = [
-              Center(
-                child: Column(
-                  children: [
-                    CircularProgressIndicator(),
-                    Text("Loading")
-                  ],
+      appBar: getAppBar(context, "My Teachers"),
+      body: Column(
+          children: [
+              Padding(
+              padding: const EdgeInsets.only(left: 30.0,top: 30.0,right: 30.0,bottom: 15.0),
+              child: Text(
+                "Your Teachers 👨‍🏫👩‍🏫",
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
                 ),
-              )
-            ];
-          }
-          return Center(
-            child: Column(
-              children: children,
+              ),
             ),
-          );
-        },
+    (isFetching)
+          ?Center(child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+                  CircularProgressIndicator(),
+                  SizedBox(
+                  height: 20,
+                  ),
+                Text("Loading Data")
+              ],
+            ))
+          :Expanded(
+            child: ListView.separated(
+                shrinkWrap: true,
+                itemBuilder: (BuildContext context, int index){
+                  return ExpansionTile(
+                    title: Text(teachers.elementAt(index).id ?? ""),
+                    children: <Widget>[
+                      ListTile(title: Row(
+                        children: [
+                          Expanded(
+                              flex:2,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Name : ${teachers.elementAt(index).name}"),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text("Subject : ${teachers.elementAt(index).subject?.subName}"),
+                                ],
+                              )),
+                          Expanded(
+                              flex:1,
+                              child: Text("")),
+                          Expanded(
+                            child: CircleAvatar(
+                              radius: 50,
+                              child: Icon(
+                                  CupertinoIcons.profile_circled,
+                                  size: 90),
+                            ),
+                          )
+                        ],
+                      )),
+
+                    ],
+                  );
+                }, separatorBuilder: (BuildContext context, int index){
+              return SizedBox( height: 0,);
+            }, itemCount: teachers.length),
+          ),
+        ]
       )
     );
   }
 
+  getMyTeachersFunc() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var stdId = jsonDecode(preferences.get("personalDetails").toString())["std_id"]["_id"];
+    teachers = await getMyTeachers(stdId);
+    setState(() {
+      isFetching = false;
+    });
+  }
+
   @override
   void initState() {
-    //getMyTeachers();
+    getMyTeachersFunc();
   }
 }

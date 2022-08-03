@@ -129,6 +129,8 @@ class TeacherModel{
 
   TeacherModel.forMyTeachers(this._id,this._name,this._subject);
 
+  TeacherModel.forStudents(this._id,this._name,this._subject);
+
   factory TeacherModel.fromJson(Map<String,dynamic> json){
     return TeacherModel(json["_id"], json["name"], json["degree"], json["dob"], json["gender"], json["email"], json["phoneNo"].toString(), json["currentAddress"], json["permanentAddress"], json["motherTongue"], json["bloodGroup"], json["salary"].toString(), json["status"]);
   }
