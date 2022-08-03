@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:onyourmarks_student/Components/getAppBar.dart';
 import 'package:onyourmarks_student/models/TeacherModel.dart';
 
-import '../API Handler/ChatAPIs.dart';
-import '../models/ChatModel.dart';
+import '../../API Handler/ChatAPIs.dart';
+import '../../models/ChatModel.dart';
+
 
 class MessageScreen extends StatefulWidget {
   final String chat_id;
@@ -37,13 +38,14 @@ class _MessageScreenState extends State<MessageScreen> {
       }
       setState(() {
         messages = messages1;
+        messageController.dispose();
       });
     });
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: getAppBar(context),
+      appBar: getAppBar(context, ""),
       body: Column(
         children: [
           Expanded(

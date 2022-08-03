@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:onyourmarks_student/API%20Handler/ChatAPIs.dart';
-import 'package:onyourmarks_student/Chat/MessageScreen.dart';
 import 'package:onyourmarks_student/Components/getAppBar.dart';
 import 'package:onyourmarks_student/models/TeacherModel.dart';
+
+import 'MessageScreen.dart';
+
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -16,7 +18,7 @@ class _ChatPageState extends State<ChatPage> {
    @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: getAppBar(context),
+        appBar: getAppBar(context, "Chat"),
         body: FutureBuilder<List<TeacherModel>>(
           future: getTeachersWithoutChat(),
             builder: (BuildContext context,
@@ -105,7 +107,7 @@ class _mychatsState extends State<mychats> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: getAppBar(context),
+      appBar: getAppBar(context, "MyChat"),
       body:FutureBuilder<List<TeacherModel>>(
         future: getMyChats(),
         builder: (BuildContext context,AsyncSnapshot<List<TeacherModel>> snapshot){

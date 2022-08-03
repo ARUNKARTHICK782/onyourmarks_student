@@ -1,5 +1,7 @@
 import 'dart:core';
 
+import 'package:onyourmarks_student/models/SubjectModel.dart';
+
 class TeacherModel{
   String? _id;
   String? _name ;
@@ -15,7 +17,14 @@ class TeacherModel{
   String? _salary;
   String? _status;
   String? _chat_id;
+  SubjectModel? _subject;
 
+
+  SubjectModel? get subject => _subject;
+
+  set subject(SubjectModel? value) {
+    _subject = value;
+  }
 
   String? get chat_id => _chat_id;
 
@@ -118,6 +127,7 @@ class TeacherModel{
 
   TeacherModel.forChat(this._id,this._name,this._chat_id);
 
+  TeacherModel.forMyTeachers(this._id,this._name,this._subject);
 
   factory TeacherModel.fromJson(Map<String,dynamic> json){
     return TeacherModel(json["_id"], json["name"], json["degree"], json["dob"], json["gender"], json["email"], json["phoneNo"].toString(), json["currentAddress"], json["permanentAddress"], json["motherTongue"], json["bloodGroup"], json["salary"].toString(), json["status"]);
