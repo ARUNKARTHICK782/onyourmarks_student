@@ -6,17 +6,19 @@ import 'package:http/http.dart' as http;
 import 'package:onyourmarks_student/api/apiLink.dart';
 import 'package:onyourmarks_student/models/TeacherModel.dart';
 
+import '../Components/getAppBar.dart';
 import '../models/ChatModel.dart';
 import '../models/StudentModel.dart';
 
 Future<List<TeacherModel>> getTeachersWithoutChat() async{
+  var token = await getToken();
   List<TeacherModel> teachersWithoutChat= [];
   // debugPrint("In func");
   var res = await http.get(
       Uri.parse(apiLink.apilink+"api/student/teachers-without-chat"),
       headers: {
         "content-type":"application/json",
-        "x-auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmRlMzBjMWJjNmEzZGE3NjU5YjgxNmMiLCJyb2xlIjoiU3R1ZGVudCIsImlhdCI6MTY1ODcyMDE0Mn0.jYSIJMyP_Mf_dLtwJoa_sXMykc0ORVfdDBmuHMWEM84"
+        "x-auth-token":token
       },
   );
   // debugPrint(res.body);
@@ -31,11 +33,12 @@ Future<List<TeacherModel>> getTeachersWithoutChat() async{
 
 
 Future<List<TeacherModel>> getMyChats() async{
+  var token = await getToken();
   List<TeacherModel> teachers = [];
   var res  = await http.get(Uri.parse(apiLink.apilink+"api/student/mychat"),
     headers: {
       "content-type":"application/json",
-      "x-auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmRlMzBjMWJjNmEzZGE3NjU5YjgxNmMiLCJyb2xlIjoiU3R1ZGVudCIsImlhdCI6MTY1ODcyMDE0Mn0.jYSIJMyP_Mf_dLtwJoa_sXMykc0ORVfdDBmuHMWEM84"
+      "x-auth-token":token
     },
   );
   var teachersRes = json.decode(res.body);
@@ -93,6 +96,7 @@ Future<List<Chat>> getMessagesFromFB1(String chat_id) async{
 // }
 
 postNewChat(String teacher_id,String student_id) async{
+  var token = await getToken();
   var body = {
     "teacher_id" : teacher_id,
     "student_id" : student_id,
@@ -101,7 +105,7 @@ postNewChat(String teacher_id,String student_id) async{
     body: json.encode(body),
     headers: {
       "content-type":"application/json",
-      "x-auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmRlMzBjMWJjNmEzZGE3NjU5YjgxNmMiLCJyb2xlIjoiU3R1ZGVudCIsImlhdCI6MTY1ODcyMDE0Mn0.jYSIJMyP_Mf_dLtwJoa_sXMykc0ORVfdDBmuHMWEM84"
+      "x-auth-token":token
     },
   ).then((value) {
     print("Chat added");
