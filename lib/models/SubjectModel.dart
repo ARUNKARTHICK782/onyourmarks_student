@@ -40,6 +40,8 @@ class SubjectModel{
 
   SubjectModel.forStudentMarks(this._id,this._subName,this._totalMarks,this._obtained);
 
+  SubjectModel.forTeachers(this._id,this._subName,this._totalMarks);
+
   factory SubjectModel.fromJson(Map<String, dynamic> json){
     return SubjectModel(json["_id"], json["sub_name"], json["total_marks"].toString(), json["date"].toString());
   }
